@@ -123,7 +123,7 @@ jobs:
 
   deploy-to-vm:
     name: Deploy to VM
-    runs-on: self-hosted
+    runs-on: [self-hosted, Linux, X64]
     needs: build-and-push
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     
