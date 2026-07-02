@@ -2,10 +2,20 @@ version: "3.8"
 
 services:
   terminal-engine:
-    build: .
+    image: gisulecosystem/linux-engine:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: linux-engine
     environment:
       LOG_LEVEL: WARNING
       WEB_CONCURRENCY: 4
     ports:
       - "4041:4041"
     restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4041/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
