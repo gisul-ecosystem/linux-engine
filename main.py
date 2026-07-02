@@ -4,13 +4,11 @@ import asyncio
 import logging
 import os
 import time
-from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
-from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
 
 from execution_engine import CommandExecutionEngine
 from session_manager import SessionManager, TerminalSession
@@ -38,8 +36,6 @@ app.add_middleware(
 engine = CommandExecutionEngine(required_paths=["/home/user/project"])
 # Session manager with 120-minute idle timeout (7200 seconds)
 sessions = SessionManager(idle_ttl_seconds=7200)
-BASE_DIR = Path(__file__).resolve().parent
-FRONTEND_DIST = BASE_DIR / "frontend" / "dist"
 
 
 @app.on_event("startup")
@@ -47,59 +43,20 @@ async def start_session_cleanup() -> None:
     asyncio.create_task(cleanup_idle_sessions())
 
 
+@app.get("/")
+async def root() -> JSONResponse:
+    return JSONResponse({
+        "service": "Terminal Engine",
+        "status": "running",
+        "websocket_endpoint": "/terminal",
+        "health_endpoint": "/health",
+        "docs_endpoint": "/docs"
+    })
+
+
 @app.get("/health")
 async def health() -> JSONResponse:
     return JSONResponse({"status": "ok", "active_sessions": len(sessions.sessions)})
-
-
-if FRONTEND_DIST.exists():
-    app.mount("/assets", StaticFiles(directory=FRONTEND_DIST / "assets"), name="assets")
-
-
-@app.get("/")
-async def index() -> Response:
-    if not FRONTEND_DIST.exists():
-        return HTMLResponse(
-            """<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Terminal Engine</title>
-    <style>
-      body {
-        margin: 0;
-        font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-        background: #061012;
-        color: #d7fbe5;
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        padding: 24px;
-      }
-      main {
-        max-width: 720px;
-        border: 1px solid rgba(124, 255, 170, 0.18);
-        border-radius: 16px;
-        background: rgba(6, 12, 12, 0.9);
-        padding: 24px;
-        box-shadow: 0 24px 90px rgba(0, 0, 0, 0.45);
-      }
-      code {
-        color: #7cffaa;
-      }
-    </style>
-  </head>
-  <body>
-    <main>
-      <h1>Terminal frontend not built yet</h1>
-      <p>Run the frontend build, or start the Docker image to get the bundled UI.</p>
-      <p><code>cd frontend && npm install && npm run build</code></p>
-    </main>
-  </body>
-</html>"""
-        )
-    return FileResponse(FRONTEND_DIST / "index.html")
 
 
 async def cleanup_idle_sessions() -> None:
