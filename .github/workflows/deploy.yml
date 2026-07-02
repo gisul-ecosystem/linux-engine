@@ -13,8 +13,8 @@ on:
   workflow_dispatch:
 
 env:
-  DOCKER_USERNAME: gisul-docker
-  IMAGE_NAME: gisulecosystem/linux-engine
+  DOCKER_USERNAME: gisuldocker
+  IMAGE_NAME: gisuldocker/linux-engine
   REGISTRY: docker.io
 
 jobs:
@@ -153,7 +153,7 @@ jobs:
           if [ "${{ needs.build-and-push.result }}" == "success" ] && [ "${{ needs.security-scan.result }}" == "success" ]; then
             echo "✅ Deployment successful!"
             echo "Image: ${{ env.IMAGE_NAME }}:latest"
-            echo "Available at: https://hub.docker.com/r/gisulecosystem/linux-engine"
+            echo "Available at: https://hub.docker.com/r/gisuldocker/linux-engine"
           else
             echo "❌ Deployment failed or has warnings"
             exit 1
