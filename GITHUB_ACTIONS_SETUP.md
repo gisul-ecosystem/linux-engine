@@ -1,5 +1,7 @@
 # GitHub Actions CI/CD Setup Guide
 
+> **Servers now run rootful Podman, not Docker.** Setup, the switch-over and checks are in [PODMAN.md](PODMAN.md). Docker commands below map one-to-one to `podman` (`docker compose` is `podman compose`); image builds on GitHub's runners still use Docker.
+
 ## 📋 Overview
 
 This repository uses GitHub Actions for automated building, testing, and deployment of the Linux Engine Docker image to Docker Hub.

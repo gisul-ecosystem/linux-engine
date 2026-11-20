@@ -1,5 +1,7 @@
 # Self-Hosted GitHub Runner Setup Guide
 
+> **Servers now run rootful Podman, not Docker.** Setup, the switch-over and checks are in [PODMAN.md](PODMAN.md). Docker commands below map one-to-one to `podman` (`docker compose` is `podman compose`); image builds on GitHub's runners still use Docker.
+
 ## 📋 Overview
 
 This guide will help you set up a self-hosted GitHub Actions runner on your VM for automated deployments.
