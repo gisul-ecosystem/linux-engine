@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   terminal-engine:
-    image: gisuldocker/linux-engine:latest
+    image: docker.io/gisuldocker/linux-engine:latest
     build:
       context: .
       dockerfile: Dockerfile

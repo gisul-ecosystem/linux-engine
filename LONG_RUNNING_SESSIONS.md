@@ -1,5 +1,7 @@
 # Long-Running Session Optimizationn
 
+> **Servers now run rootful Podman, not Docker.** Setup, the switch-over and checks are in [PODMAN.md](PODMAN.md). Docker commands below map one-to-one to `podman` (`docker compose` is `podman compose`); image builds on GitHub's runners still use Docker.
+
 ## 🎯 Objective
 
 Optimize the Linux Bash WebSocket terminal engine to support long-running sessions with a timeout of **120 minutes (7200 seconds)**, preventing WebSocket disconnection during extended user tests.

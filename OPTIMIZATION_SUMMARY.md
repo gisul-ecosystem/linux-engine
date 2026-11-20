@@ -1,5 +1,7 @@
 # Long-Running Session Optimization - Quick Summary
 
+> **Servers now run rootful Podman, not Docker.** Setup, the switch-over and checks are in [PODMAN.md](PODMAN.md). Docker commands below map one-to-one to `podman` (`docker compose` is `podman compose`); image builds on GitHub's runners still use Docker.
+
 ## 🎯 Objective Achieved
 
 ✅ **WebSocket sessions now support 120-minute duration without disconnection**
